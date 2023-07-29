@@ -1,0 +1,20 @@
+import cv2
+
+url = "http://192.168.1.100:8080/video"
+cap = cv2.VideoCapture(url)
+
+while cap.isOpened():
+    ret, frame = cap.read()
+    
+    if not ret:
+        print("Error al leer el fotograma.")
+        break
+
+    cv2.imshow('Imagen', cv2.resize(frame, (600, 400)))
+
+    key = cv2.waitKey(1)
+    if key == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
