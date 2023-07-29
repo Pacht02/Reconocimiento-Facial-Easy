@@ -1,0 +1,34 @@
+import cv2
+
+fro_archivo = cv2.CascadeClassifier('C:\haarcascade_frontalface_default.xml')
+url = "http://192.168.1.100:8080/video"
+camara = cv2.VideoCapture(0)
+
+if not camara.isOpened():
+    print("Error al abrir la cámara")
+    exit()
+
+while True:
+    try:
+        ret, frame = camara.read()
+        if not ret:
+            continue
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = fro_archivo.detectMultiScale(gray, 1.1, 4)
+
+        for (x, y, w, h) in faces:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0, 0), 2)
+            mmvre = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(frame, "Eduardo", (x, y - 10), mmvre, 0.5, (255, 0, 0, 0), 2)
+
+        cv2.imshow('Detector de Caras', frame)
+
+        if cv2.waitKey(1) == ord('q'):
+            break
+
+    except cv2.error:
+        print("Se produjo un error en OpenCV")
+        break
+
+cv2.destroyAllWindows()
